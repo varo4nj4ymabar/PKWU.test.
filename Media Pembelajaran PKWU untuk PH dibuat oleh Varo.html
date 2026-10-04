@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ PKWU XII Ultimate Cyber Study Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: rgba(22, 31, 49, 0.7);
+      --bg-card-hover: rgba(33, 46, 74, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.4);
+
+      /* Vibrant Neon Palette */
+      --neon-cyan: #00f2fe;
+      --neon-pink: #ff007f;
+      --neon-purple: #7f00ff;
+      --neon-yellow: #ffe600;
+      --neon-green: #00ff87;
+      --neon-orange: #ff5e00;
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f0f4f8;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-hover: rgba(255, 255, 255, 0.98);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --shadow-color: rgba(0, 0, 0, 0.08);
+
+      --neon-cyan: #0088ff;
+      --neon-pink: #e60067;
+      --neon-purple: #6200ea;
+      --neon-yellow: #d4a000;
+      --neon-green: #00a859;
+      --neon-orange: #e65100;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 80px;
+      overflow-x: hidden;
+    }
+
+    /* Background Ambient Lights */
+    .ambient-glow {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .glow-1 { top: -100px; left: -100px; background: var(--neon-cyan); }
+    .glow-2 { bottom: 10%; right: -100px; background: var(--neon-pink); }
+    .glow-3 { top: 40%; left: 30%; background: var(--neon-purple); }
+
+    /* Header Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(11, 15, 25, 0.7);
+      border-bottom: 1px solid var(--border-color);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .brand h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-yellow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    /* Controls & Filter */
+    .controls {
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .search-box {
+      width: 100%;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 16px 22px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px var(--shadow-color);
+    }
+
+    .search-box input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+
+    .btn-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-pill.active, .btn-pill:hover {
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Main Container Grid */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+    }
+
+    /* Card Styling */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-tag {
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(0, 242, 254, 0.12);
+      color: var(--neon-cyan);
+      margin-bottom: 16px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card ul {
+      list-style: none;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .card ul li {
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 22px;
+    }
+
+    .card ul li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--neon-pink);
+      font-size: 0.9rem;
+    }
+
+    .highlight {
+      background: rgba(255, 230, 0, 0.15);
+      color: var(--neon-yellow);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* Calculator Custom Card */
+    .calc-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(22, 31, 49, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1px solid var(--neon-cyan);
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .calc-input {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .calc-input label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .calc-input input {
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .calc-input input:focus {
+      border-color: var(--neon-green);
+    }
+
+    .calc-result-box {
+      background: rgba(0, 255, 135, 0.08);
+      border: 1px solid var(--neon-green);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .calc-val {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--neon-green);
+    }
+
+    /* Interactive Quiz Section */
+    .quiz-card {
+      grid-column: 1 / -1;
+      border: 1px solid var(--neon-pink);
+    }
+
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 14px 20px;
+      border-radius: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover {
+      background: rgba(255, 0, 127, 0.2);
+      border-color: var(--neon-pink);
+    }
+
+    .quiz-feedback {
+      margin-top: 15px;
+      font-weight: 800;
+      font-size: 1rem;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">⚡</div>
+      <h1>PKWU XII Ultimate Dashboard</h1>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+    </button>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🚀 Cari konsep, istilah, rumus (cth: HPP, 6M, AIDA, DOC, Ansoff)..." onkeyup="liveSearch()">
+    </div>
+    <div class="filter-pills">
+      <button class="btn-pill active" onclick="filterCategory('all', this)">✨ Semua Bab</button>
+      <button class="btn-pill" onclick="filterCategory('bab1', this)">🎨 Bab 1: Pasar Lokal</button>
+      <button class="btn-pill" onclick="filterCategory('bab2', this)">💼 Bab 2: Profesi</button>
+      <button class="btn-pill" onclick="filterCategory('bab3', this)">🐔 Bab 3: Petelur</button>
+      <button class="btn-pill" onclick="filterCategory('bab4', this)">🍲 Bab 4: Kuliner</button>
+      <button class="btn-pill" onclick="filterCategory('bab5', this)">🌍 Bab 5 & 6: Global/Tech</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Tool Interaktif: Live Calculator -->
+    <div class="card calc-card" data-category="bab4">
+      <div class="card-tag" style="color: var(--neon-green); border-color: var(--neon-green);">🧮 Live Simulator Finansial Usaha</div>
+      <h3>Simulasi Hitung HPP, Omzet, & Laba Bersih</h3>
+      <div class="calc-grid">
+        <div class="calc-input">
+          <label>Biaya Variabel (Bahan Baku)</label>
+          <input type="number" id="biayaVariabel" placeholder="cth: 500000" oninput="calculateFinancials()">
+        </div>
+        <div class="calc-input">
+          <label>Biaya Tetap (Gaji/Gas/Lampu)</label>
+          <input type="number" id="biayaTetap" placeholder="cth: 150000" oninput="calculateFinancials()">
+        </div>
+        <div class="calc-input">
+          <label>Jumlah Produk Dihasilkan</label>
+          <input type="number" id="jumlahProduk" placeholder="cth: 50" oninput="calculateFinancials()">
+        </div>
+        <div class="calc-input">
+          <label>Harga Jual / Unit</label>
+          <input type="number" id="hargaJual" placeholder="cth: 20000" oninput="calculateFinancials()">
+        </div>
+      </div>
+      <div class="calc-result-box">
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">TOTAL BIAYA</div>
+          <div class="calc-val" id="totalBiayaRes" style="color:var(--neon-yellow);">Rp 0</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">HPP / UNIT</div>
+          <div class="calc-val" id="hppRes">Rp 0</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">ESTIMASI LABA BERSIH</div>
+          <div class="calc-val" id="labaRes" style="color:var(--neon-cyan);">Rp 0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bab 1: Card 1 -->
+    <div class="card" data-category="bab1">
+      <div class="card-tag">Bab 1: Kerajinan Pasar Lokal</div>
+      <h3>💡 Hukum Ekonomi & Unsur 6M</h3>
+      <ul>
+        <li><strong>Hukum Ekonomi:</strong> Barang unik &amp; terbatas (<span class="highlight">Limited Edition</span>) memiliki nilai jual berlipat ganda[cite: 10].</li>
+        <li><strong>Sumber Daya (6M):</strong>
+          <br>• <mark>Man</mark>: Fokus ke <em>Mind Power</em>[cite: 11].
+          <br>• <mark>Money</mark>: Modal &amp; Arus Kas[cite: 11].
+          <br>• <mark>Material</mark>: Bahan mentah konsisten[cite: 11, 18].
+          <br>• <mark>Machine</mark>: Alat/Mesin produksi[cite: 11].
+          <br>• <mark>Method</mark>: SOP Kerja[cite: 11].
+          <br>• <mark>Market</mark>: Target Konsumen[cite: 11].</li>
+        <li><strong>Gelombang Ekonomi:</strong> Pertanian &rarr; Industri &rarr; Informasi &rarr; <strong>Ekonomi Kreatif</strong>[cite: 11, 12].</li>
+      </ul>
+    </div>
+
+    <!-- Bab 1: Card 2 -->
+    <div class="card" data-category="bab1">
+      <div class="card-tag">Bab 1: Kerajinan Pasar Lokal</div>
+      <h3>🛠️ Tahapan Produksi & Promosi AIDA</h3>
+      <ul>
+        <li><strong>Alur Desain:</strong> Brainstorming &rarr; Rasionalisasi &rarr; Prototyping (Studi Model 3D) &rarr; Desain Akhir[cite: 22, 24, 25].</li>
+        <li><strong>4 Tahap Produksi:</strong> Pembahanan &rarr; Pembentukan &rarr; Perakitan &rarr; Finishing[cite: 27].</li>
+        <li><strong>Kemasan:</strong> Primer (Menempel produk)[cite: 26, 32], Sekunder (Wadah dus)[cite: 32], Tersier (Kargo)[cite: 32].</li>
+        <li><strong>Respon AIDA Promosi:</strong> Attention &rarr; Interest &rarr; Desire &rarr; Action[cite: 31, 42].</li>
+      </ul>
+    </div>
+
+    <!-- Bab 2: Card 1 -->
+    <div class="card" data-category="bab2">
+      <div class="card-tag">Bab 2: Rekayasa Profesi</div>
+      <h3>💼 Karir Pasca Sekolah & 4 Pilar</h3>
+      <ul>
+        <li><strong>3 Opsi Lulusan:</strong> Bekerja (Sertifikat Kompetensi LSP)[cite: 50], Kuliah (Vokasi/Akademik)[cite: 50, 51], Wirausaha[cite: 50, 51].</li>
+        <li><strong>Ciri Produk Jasa:</strong> <span class="highlight">Intangible</span> (Tak berwujud), <span class="highlight">Inseparable</span> (Tak terpisahkan), <span class="highlight">Variable</span>, &amp; <span class="highlight">Perishable</span>[cite: 50].</li>
+        <li><strong>4 Pilar Kompetensi:</strong> Personal (Manajemen diri)[cite: 60], Sosial (Teamwork)[cite: 60], Teknis (Skill khusus)[cite: 60], &amp; Metodologi (Problem solving)[cite: 60].</li>
+      </ul>
+    </div>
+
+    <!-- Bab 3: Card 1 -->
+    <div class="card" data-category="bab3">
+      <div class="card-tag">Bab 3: Unggas Petelur</div>
+      <h3>🐔 Budi Daya Ayam Petelur</h3>
+      <ul>
+        <li><strong>Protein Hewani:</strong> Punya <span class="highlight">9 Asam Amino Esensial Lengkap</span> &amp; mudah dicerna dibanding nabati[cite: 88].</li>
+        <li><strong>Kandang Battery:</strong> Bertingkat &amp; berderet. Menghemat tempat, telur bersih, &amp; cegah kanibalisme[cite: 98, 99].</li>
+        <li><strong>Bibit DOC:</strong> Bobot ideal 35–40 gram, aktif, mata cerah, anus bersih[cite: 100].</li>
+        <li><strong>Waktu Panen Telur:</strong> Dipanen <mark>3x Sehari</mark> (Pagi 10-11, Siang 13-14, Sore 15-16)[cite: 112].</li>
+      </ul>
+    </div>
+
+    <!-- Bab 4: Card 1 -->
+    <div class="card" data-category="bab4">
+      <div class="card-tag">Bab 4: Makanan Daerah</div>
+      <h3>🍲 Modifikasi Kuliner & Konsinyasi</h3>
+      <ul>
+        <li><strong>Tujuan Modifikasi:</strong> Higienis, awet, kemasan menarik, &amp; cita rasa sesuai pasar modern[cite: 125, 127].</li>
+        <li><strong>Sistem Konsinyasi:</strong>
+          <br>• <strong>Konsinyor:</strong> Pemilik barang titipan[cite: 33, 39, 144].
+          <br>• <strong>Konsinyi:</strong> Pemilik toko/outlet[cite: 33, 39, 144].</li>
+        <li><strong>Rumus HPP/Unit:</strong> Total Biaya Produksi &divide; Jumlah Produk Dihasilkan[cite: 140].</li>
+      </ul>
+    </div>
+
+    <!-- Bab 5 & 6: Card 1 -->
+    <div class="card" data-category="bab5">
+      <div class="card-tag">Bab 5 & 6: Global & Teknologi</div>
+      <h3>🌍 Matriks Ansoff & Tekno Terapan</h3>
+      <ul>
+        <li><strong>Matriks Ansoff:</strong>
+          <br>• Produk Lama + Pasar Lama = <em>Market Penetration</em>[cite: 150]
+          <br>• Produk Lama + Pasar Baru = <em>Market Development (Ekspor)</em>[cite: 150]
+          <br>• Produk Baru + Pasar Lama = <em>Product Development</em>[cite: 150]
+          <br>• Produk Baru + Pasar Baru = <em>Diversification</em>[cite: 150]</li>
+        <li><strong>Teknologi Terapan:</strong> Alat praktis pemecah masalah lokal yang ramah lingkungan[cite: 182].</li>
+      </ul>
+    </div>
+
+    <!-- Interactive Quiz Card -->
+    <div class="card quiz-card">
+      <div class="card-tag" style="color: var(--neon-pink); border-color: var(--neon-pink);">🎯 Uji Pemahaman Kilat (Interactive Quiz)</div>
+      <h3 id="quizQuestion">Pertanyaan: Berapa kali idealnya panen telur ayam dilakukan dalam sehari?</h3>
+      <div id="quizOptions">
+        <div class="quiz-option" onclick="checkAnswer(false, this)">A. 1 kali (Sore hari)</div>
+        <div class="quiz-option" onclick="checkAnswer(true, this)">B. 3 kali (Pagi, Siang, Sore)</div>
+        <div class="quiz-option" onclick="checkAnswer(false, this)">C. 5 kali (Setiap jam)</div>
+      </div>
+      <div id="quizFeedback" class="quiz-feedback"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>⚡ Crafted with Cyber Energy for High School PKWU Preparation ⚡</p>
+  </footer>
+
+  <script>
+    // Dark / Light Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+
+      document.getElementById('themeIcon').innerText = next === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeText').innerText = next === 'dark' ? 'Dark Mode' : 'Light Mode';
+    }
+
+    // Live Search Filter
+    function liveSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    // Category Filter Pills
+    function filterCategory(cat, element) {
+      document.querySelectorAll('.btn-pill').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat || card.classList.contains('calc-card') || card.classList.contains('quiz-card')) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Financial Live Calculator
+    function calculateFinancials() {
+      const variabel = parseFloat(document.getElementById('biayaVariabel').value) || 0;
+      const tetap = parseFloat(document.getElementById('biayaTetap').value) || 0;
+      const jumlah = parseFloat(document.getElementById('jumlahProduk').value) || 0;
+      const hargaJual = parseFloat(document.getElementById('hargaJual').value) || 0;
+
+      const totalBiaya = variabel + tetap;
+      const hpp = jumlah > 0 ? totalBiaya / jumlah : 0;
+      const omzet = jumlah * hargaJual;
+      const laba = omzet - totalBiaya;
+
+      document.getElementById('totalBiayaRes').innerText = 'Rp ' + totalBiaya.toLocaleString('id-ID');
+      document.getElementById('hppRes').innerText = 'Rp ' + Math.round(hpp).toLocaleString('id-ID');
+      document.getElementById('labaRes').innerText = 'Rp ' + laba.toLocaleString('id-ID');
+    }
+
+    // Quick Quiz Checker
+    function checkAnswer(isCorrect, element) {
+      const feedback = document.getElementById('quizFeedback');
+      feedback.style.display = 'block';
+
+      if (isCorrect) {
+        element.style.background = 'rgba(0, 255, 135, 0.3)';
+        element.style.borderColor = 'var(--neon-green)';
+        feedback.innerText = '🎉 TEPAT BANGET! Telur dipanen 3x sehari (Jam 10-11, 13-14, 15-16) untuk cegah retak & infeksi bakteri!';
+        feedback.style.color = 'var(--neon-green)';
+      } else {
+        element.style.background = 'rgba(255, 0, 127, 0.3)';
+        element.style.borderColor = 'var(--neon-pink)';
+        feedback.innerText = '❌ Masih kurang tepat, coba ingat lagi aturan panen telur di Bab 3!';
+        feedback.style.color = 'var(--neon-pink)';
+      }
+    }
+  </script>
+</body>
+</html>
